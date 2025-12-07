@@ -3,6 +3,15 @@ import React, { useState } from "react";
 
 type RoastStatus = "TERMINAL" | "DISTRESSED" | "RETAIL" | "PENDING";
 
+interface RoastPayload {
+  score?: number;
+  status?: string;
+  roast?: string;
+  analysisLog?: string[];
+  _source?: string;
+  error?: string;
+}
+
 const LOADING_STATES = [
   "INITIALIZING_HANDSHAKE...",
   "PARSING_PEDIGREE...",
@@ -35,11 +44,9 @@ const SignalAudit: React.FC = () => {
   const [resumeText, setResumeText] = useState("");
   const [score, setScore] = useState<number | null>(null);
   const [status, setStatus] = useState<RoastStatus>("PENDING");
-
   const [caption, setCaption] = useState(
     "Bateman reads the text only. No uploads. Nothing is stored."
   );
-
   const [logLines, setLogLines] = useState<string[]>([]);
   const [displayedRoast, setDisplayedRoast] = useState<string>("");
   const [isRunning, setIsRunning] = useState(false);
@@ -59,7 +66,7 @@ const SignalAudit: React.FC = () => {
     setCaption("Diagnostic in progress. Do not refresh.");
     setLogLines([`> ${LOADING_STATES[0]}`]);
 
-    // Rolling log interval
+    // Rolling synthetic log
     let step = 0;
     const intervalId = window.setInterval(() => {
       step += 1;
@@ -77,11 +84,19 @@ const SignalAudit: React.FC = () => {
         body: JSON.stringify({ resumeText: text })
       });
 
-      let payload: any;
+      let payload: RoastPayload;
       try {
-        payload = await res.json();
+        payload = (await res.json()) as RoastPayload;
       } catch {
-        throw new Error("Non-JSON response from diagnostic endpoint.");
+        window.clearInterval(intervalId);
+        setScore(null);
+        setStatus("TERMINAL");
+        setDisplayedRoast(
+          "The diagnostic endpoint returned something unreadable. Your résumé confused the model before it confused recruiting."
+        );
+        setCaption("Non-JSON response from diagnostic engine.");
+        setIsRunning(false);
+        return;
       }
 
       if (!res.ok || payload?.error) {
@@ -120,11 +135,27 @@ const SignalAudit: React.FC = () => {
         setCaption("RETAIL // Passable, but indistinguishable from the noise floor.");
       }
 
-      // Append final log marker
-      setLogLines((prev) => [...prev, "> ANALYSIS_COMPLETE. RENDERING_JUDGMENT..." ]);
+      // Merge backend analysis log into the terminal feed
       window.clearInterval(intervalId);
+      setLogLines((prev) => {
+        const merged = [...prev];
 
-      // Typewriter effect – stream roast char-by-char
+        if (Array.isArray(payload.analysisLog) && payload.analysisLog.length > 0) {
+          merged.push("> ENGINE_LOG:");
+          for (const line of payload.analysisLog) {
+            merged.push(`> ${line}`);
+          }
+        }
+
+        if (payload._source) {
+          merged.push(`> ENGINE_SOURCE: ${String(payload._source).toUpperCase()}`);
+        }
+
+        merged.push("> ANALYSIS_COMPLETE. RENDERING_JUDGMENT...");
+        return merged;
+      });
+
+      // Typewriter: stream roast char-by-char
       setDisplayedRoast("");
       let i = 0;
       const typingInterval = window.setInterval(() => {
@@ -135,7 +166,8 @@ const SignalAudit: React.FC = () => {
           setIsRunning(false);
         }
       }, 18);
-    } catch {
+    } catch (err) {
+      console.error("SignalAudit network/logic error:", err);
       window.clearInterval(intervalId);
       setScore(null);
       setStatus("TERMINAL");
@@ -157,10 +189,10 @@ const SignalAudit: React.FC = () => {
           The Signal Audit
         </div>
 
-        <div className="relative bg-black px-6 py-6 text-neutral-100 shadow-[0_24px_60px_rgba(0,0,0,0.75)] overflow-hidden">
+        <div className="relative overflow-hidden bg-black px-6 py-6 text-neutral-100 shadow-[0_24px_60px_rgba(0,0,0,0.75)]">
           {/* Ghost scan overlay */}
-          <div className="pointer-events-none absolute inset-0 opacity-10 overflow-hidden">
-            <div className="h-16 w-full bg-gradient-to-b from-transparent via-[#00ff41]/40 to-transparent animate-scan" />
+          <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-10">
+            <div className="h-16 w-full animate-scan bg-gradient-to-b from-transparent via-[#00ff41]/40 to-transparent" />
           </div>
 
           {/* Header */}
@@ -194,7 +226,7 @@ const SignalAudit: React.FC = () => {
               </div>
 
               {/* Rolling log */}
-              <div className="mt-4 border-t border-neutral-800 pt-3 font-terminal text-[10px] leading-relaxed text-neutral-400 space-y-1 min-h-[72px]">
+              <div className="mt-4 min-h-[72px] space-y-1 border-t border-neutral-800 pt-3 font-terminal text-[10px] leading-relaxed text-neutral-400">
                 {logLines.map((line, idx) => (
                   <div key={idx}>{line}</div>
                 ))}
