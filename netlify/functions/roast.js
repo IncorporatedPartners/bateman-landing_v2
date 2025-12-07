@@ -1,5 +1,5 @@
 // netlify/functions/roast.js
-// Gemini 3 Roast Engine — Bateman (verified pipeline)
+// Gemini 3 Roast Engine — Bateman (REST, structured JSON)
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -66,26 +66,23 @@ exports.handler = async function (event) {
     };
   }
 
-  // No clipping for now
   const effectiveResume = resumeText;
 
   try {
-    // --- Prompt design ---
-    const systemPrompt =
+    const prompt =
       "You are Patrick Bateman in Mergers & Acquisitions at Pierce & Pierce.\n" +
       "You evaluate resumes the way bankers evaluate distressed assets.\n" +
       "Clinical. Detached. Status-obsessed.\n\n" +
-      "Output STRICT JSON only:\n" +
+      "Given the resume below, output STRICT JSON only in this shape:\n" +
       "{\n" +
       '  \"score\": number,      // integer 1-10 (10 = weakest signal)\n' +
       '  \"status\": string,     // TERMINAL | DISTRESSED | RETAIL\n' +
-      '  \"roast\": string       // 2-4 sentences, cold, memo-tone\n' +
-      "}\n";
+      '  \"roast\": string       // long-form inner monologue, Bateman voice\n' +
+      "}\n\n" +
+      "Resume:\n-----------------\n" +
+      effectiveResume +
+      "\n\nReturn ONLY the JSON object, no explanation.";
 
-    const userPrompt =
-      "Candidate Resume:\n-----------------\n" + effectiveResume;
-
-    // --- Gemini 3 REST call ---
     const apiUrl =
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent";
 
@@ -97,50 +94,65 @@ exports.handler = async function (event) {
       },
       body: JSON.stringify({
         contents: [
-          { role: "user", parts: [{ text: systemPrompt }] },
-          { role: "user", parts: [{ text: userPrompt }] }
+          {
+            parts: [{ text: prompt }]
+          }
         ],
         generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 600,
-          thinkingLevel: "low" // prevent MAX_TOKENS from thought loops
+          temperature: 1.0,
+          maxOutputTokens: 1024,
+          // Correct placement per Gemini 3 REST guide:
+          thinkingConfig: {
+            thinkingLevel: "low"
+          },
+          // Force JSON output:
+          responseMimeType: "application/json",
+          responseJsonSchema: {
+            type: "object",
+            properties: {
+              score: { type: "number" },
+              status: {
+                type: "string",
+                enum: ["TERMINAL", "DISTRESSED", "RETAIL"]
+              },
+              roast: { type: "string" }
+            },
+            required: ["score", "status", "roast"],
+            additionalProperties: false
+          }
         }
       })
     });
 
-    // --- HTTP-level failure (not model-level) ---
     if (!geminiRes.ok) {
       const errText = await geminiRes.text();
       console.error("Gemini 3 HTTP error:", geminiRes.status, errText);
-      return success(buildFallbackRoast(effectiveResume));
+      return success(buildFallbackRoast(effectiveResume), "fallback_http");
     }
 
     const geminiJson = await geminiRes.json();
 
-    // --- Log usage ---
-    try {
-      console.log(
-        "Gemini 3 usageMetadata:",
-        JSON.stringify(geminiJson.usageMetadata || {})
-      );
-    } catch {}
-
-    // --- Extract model text ---
+    // For structured outputs, response.text is already JSON string; but via REST we
+    // get the object directly under candidates[0].content.parts[0].text
     let rawText = "";
     try {
-      const c = geminiJson.candidates?.[0]?.content?.parts?.[0];
-      if (c && typeof c.text === "string") rawText = c.text;
-    } catch {}
+      const part =
+        geminiJson.candidates?.[0]?.content?.parts?.find(
+          (p) => typeof p.text === "string"
+        );
+      if (part) rawText = part.text;
+    } catch (e) {
+      console.error("Error extracting text from Gemini 3:", e);
+    }
 
-    // If empty, fallback
-    if (!rawText.trim()) {
+    if (!rawText || !rawText.trim()) {
       console.error("Empty Gemini 3 response:", JSON.stringify(geminiJson));
-      return success(buildFallbackRoast(effectiveResume));
+      return success(buildFallbackRoast(effectiveResume), "fallback_empty");
     }
 
     rawText = rawText.trim();
 
-    // If wrapped in prose, carve out JSON
+    // If model wraps JSON with prose, try to slice it out
     if (!rawText.startsWith("{")) {
       const first = rawText.indexOf("{");
       const last = rawText.lastIndexOf("}");
@@ -154,10 +166,9 @@ exports.handler = async function (event) {
       parsed = JSON.parse(rawText);
     } catch (e) {
       console.error("Invalid JSON from Gemini 3:", rawText);
-      return success(buildFallbackRoast(effectiveResume));
+      return success(buildFallbackRoast(effectiveResume), "fallback_parse");
     }
 
-    // --- Validate & normalize ---
     let score = parsed.score;
     if (typeof score !== "number" || !isFinite(score)) score = 9;
     score = Math.max(1, Math.min(10, Math.round(score)));
@@ -174,23 +185,23 @@ exports.handler = async function (event) {
         "Your resume reads like a mall-kiosk imitation of competence. Dorsia is not returning your call.";
     }
 
-    return success({ score, status, roast });
+    return success({ score, status, roast }, "gemini");
   } catch (err) {
     console.error("Roast internal error:", err);
-    return success(buildFallbackRoast(effectiveResume));
+    return success(buildFallbackRoast(effectiveResume), "fallback_error");
   }
 };
 
 // --- Helpers ---
 
-function success(json) {
+function success(json, source) {
   return {
     statusCode: 200,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(json)
+    body: JSON.stringify({ ...json, _source: source || "unknown" })
   };
 }
 
