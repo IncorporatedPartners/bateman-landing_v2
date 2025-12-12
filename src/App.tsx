@@ -523,7 +523,7 @@ const App: React.FC = () => {
       <header className="site-header">
         <div className="header-left">
           <img
-            src="https://i.ibb.co/QvpHLYf4/03baa006-92b8-426c-8c7f-32775df0b9cb.png"
+            src="https://i.ibb.co/Zzp09MB0/bateman-logo.png"
             alt="Bateman logo"
             className="bateman-logo"
           />
@@ -631,7 +631,7 @@ const App: React.FC = () => {
             <div className="step">
               <div className="step-num">02</div>
               <div className="step-content">
-                <h3>Rebuilds your résumé into a hostile instrument.</h3>
+                <h3>Rebuilds your résumé into a precision instrument.</h3>
                 <p>
                   We delete the emotional clutter and replace it with
                   quantifiable dominance: deal sizes, velocity, impact, results.
@@ -742,7 +742,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </section>
-      
+
       <SignalAudit />
 
       {/* FAQ */}
@@ -961,7 +961,7 @@ const App: React.FC = () => {
       <footer>
         <div>
           <div className="footer-main">
-            BATEMAN © 2025. RETURN SOME VIDEOTAPES.
+            BATEMAN © 2025. GET A GODDAMN JOB.
           </div>
           <div style={{ marginTop: "0.5rem", opacity: 0.7 }}>
             Status Recovery Protocol Initialized.
