@@ -3,12 +3,12 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-black bg-[#fdfbf7] px-4 py-6 md:px-8">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6">
-        <div className="font-terminal text-[11px] uppercase tracking-[0.22em]">
-          Bateman © 2025. GET A GODDAMN JOB.
+    <footer className="footer-section">
+      <div className="footer-container">
+        <div className="footer-main">
+          Bateman © 2025. GET A <span className="strikethrough-goddamn">GODDAMN</span> JOB.
         </div>
-        <div className="font-terminal text-[10px] uppercase tracking-[0.22em] text-neutral-600">
+        <div className="footer-status">
           Status Recovery Protocol: Initialized.
         </div>
       </div>
