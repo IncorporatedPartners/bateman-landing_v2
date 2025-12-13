@@ -277,7 +277,7 @@ const App: React.FC = () => {
   return (
     <div
       ref={rootRef}
-      className="text-[18px] leading-[1.65] text-neutral-900"
+      className="text-[19px] leading-[1.7] text-neutral-900"
     >
       <div className="noise-overlay" />
 
