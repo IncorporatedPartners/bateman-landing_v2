@@ -92,7 +92,7 @@ const SignalAudit: React.FC = () => {
         setScore(null);
         setStatus("TERMINAL");
         setDisplayedRoast(
-          "The diagnostic endpoint returned something unreadable. Your résumé confused the model before it confused recruiting."
+          "The diagnostic endpoint returned something unreadable. Your r├⌐sum├⌐ confused the model before it confused recruiting."
         );
         setCaption("Non-JSON response from diagnostic engine.");
         setIsRunning(false);
@@ -104,7 +104,7 @@ const SignalAudit: React.FC = () => {
         setScore(null);
         setStatus("TERMINAL");
         setDisplayedRoast(
-          "The diagnostic endpoint returned an error. Your résumé broke the scanner before the market did."
+          "The diagnostic endpoint returned an error. Your r├⌐sum├⌐ broke the scanner before the market did."
         );
         setCaption("Try again in a few minutes.");
         setIsRunning(false);
@@ -120,7 +120,7 @@ const SignalAudit: React.FC = () => {
       const rawStatus = normalizeStatus(payload.status || "");
       const roastText: string =
         payload.roast ||
-        "You have all the characteristics of a high-value candidate—experience, degrees, skills—but not a single clear, identifiable emotion except... desperation.";
+        "You have all the characteristics of a high-value candidateΓÇöexperience, degrees, skillsΓÇöbut not a single clear, identifiable emotion except... desperation.";
 
       setScore(safeScore);
       setStatus(rawStatus);
@@ -147,10 +147,7 @@ const SignalAudit: React.FC = () => {
           }
         }
 
-        if (payload._source) {
-          merged.push(`> ENGINE_SOURCE: ${String(payload._source).toUpperCase()}`);
-        }
-
+        // Intentionally omit any engine/source identification line.
         merged.push("> ANALYSIS_COMPLETE. RENDERING_JUDGMENT...");
         return merged;
       });
@@ -198,7 +195,7 @@ const SignalAudit: React.FC = () => {
           {/* Header */}
           <div className="relative z-10 mb-4 flex items-center justify-between font-terminal text-[10px] uppercase tracking-[0.18em] text-neutral-400">
             <span>Input // Resume Signal Trace</span>
-            <span>Bateman Diagnostics • Client-Side Only</span>
+            <span>Bateman Diagnostics ΓÇó Client-Side Only</span>
           </div>
 
           {/* Two-column layout */}
@@ -242,7 +239,7 @@ const SignalAudit: React.FC = () => {
                 <textarea
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
-                  placeholder="// Paste your CV text here. Don’t include your photo. We don’t care what you look like."
+                  placeholder="// Paste your CV text here. DonΓÇÖt include your photo. We donΓÇÖt care what you look like."
                   className="min-h-[180px] w-full border border-neutral-800 bg-[#050505] px-3 py-3 font-terminal text-[11px] leading-relaxed text-[#d1fae5] outline-none placeholder:text-neutral-600 focus:border-[#00ff41]"
                   spellCheck={false}
                 />
@@ -260,7 +257,7 @@ const SignalAudit: React.FC = () => {
           {/* Roast output */}
           <div className="relative z-10 mt-6 border-t border-neutral-800 pt-4">
             <div className="mb-2 font-terminal text-[10px] uppercase tracking-[0.18em] text-neutral-400">
-              Hostile Output
+              Diagnostic Output
             </div>
             <div className="min-h-[120px] whitespace-pre-line font-terminal text-[11px] leading-relaxed text-neutral-200">
               {displayedRoast}
@@ -276,7 +273,7 @@ const SignalAudit: React.FC = () => {
               disabled={isRunning}
               className="mt-5 w-full border border-[#00ff41] bg-[#00ff41] px-4 py-3 font-terminal text-[11px] font-black uppercase tracking-[0.26em] text-black transition-none hover:bg-black hover:text-[#00ff41] disabled:cursor-default disabled:opacity-50"
             >
-              {isRunning ? "SCANNING…" : "RUN DIAGNOSTIC"}
+              {isRunning ? "SCANNINGΓÇª" : "RUN DIAGNOSTIC"}
             </button>
           </div>
         </div>

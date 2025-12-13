@@ -7,7 +7,7 @@ const HeaderBar: React.FC = () => {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <div className="flex items-center gap-3">
           <img
-            src="https://i.ibb.co/QvpHLYf4/03baa006-92b8-426c-8c7f-32775df0b9cb.png"
+            src="https://i.ibb.co/Zzp09MB0/bateman-logo.png"
             alt="Bateman logo"
             className="h-10 w-auto object-contain"
           />
