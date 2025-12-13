@@ -92,7 +92,7 @@ const SignalAudit: React.FC = () => {
         setScore(null);
         setStatus("TERMINAL");
         setDisplayedRoast(
-          "The diagnostic endpoint returned something unreadable. Your r├⌐sum├⌐ confused the model before it confused recruiting."
+          "The diagnostic endpoint returned something unreadable. Your resume confused the model before it confused recruiting."
         );
         setCaption("Non-JSON response from diagnostic engine.");
         setIsRunning(false);
@@ -104,7 +104,7 @@ const SignalAudit: React.FC = () => {
         setScore(null);
         setStatus("TERMINAL");
         setDisplayedRoast(
-          "The diagnostic endpoint returned an error. Your r├⌐sum├⌐ broke the scanner before the market did."
+          "The diagnostic endpoint returned an error. Your resume broke the scanner before the market did."
         );
         setCaption("Try again in a few minutes.");
         setIsRunning(false);
@@ -120,7 +120,7 @@ const SignalAudit: React.FC = () => {
       const rawStatus = normalizeStatus(payload.status || "");
       const roastText: string =
         payload.roast ||
-        "You have all the characteristics of a high-value candidateΓÇöexperience, degrees, skillsΓÇöbut not a single clear, identifiable emotion except... desperation.";
+        "You have all the characteristics of a high-value candidate: experience, degrees, skills, but not a single clear, identifiable emotion except... desperation.";
 
       setScore(safeScore);
       setStatus(rawStatus);
@@ -179,7 +179,7 @@ const SignalAudit: React.FC = () => {
   return (
     <section
       id="signal-audit"
-      className="border-b border-black bg-[#fdfbf7] px-4 py-16 md:px-8 md:py-20"
+      className="border-b border-black bg-[#fdfbf7] px-4 py-14 md:px-8 md:py-16"
     >
       <div className="mx-auto max-w-4xl">
         <div className="mb-8 text-center font-display text-sm uppercase tracking-[0.26em]">
@@ -195,7 +195,7 @@ const SignalAudit: React.FC = () => {
           {/* Header */}
           <div className="relative z-10 mb-4 flex items-center justify-between font-terminal text-[10px] uppercase tracking-[0.18em] text-neutral-400">
             <span>Input // Resume Signal Trace</span>
-            <span>Bateman Diagnostics ΓÇó Client-Side Only</span>
+            <span>Bateman Diagnostics // Client-Side Only</span>
           </div>
 
           {/* Two-column layout */}
@@ -239,7 +239,7 @@ const SignalAudit: React.FC = () => {
                 <textarea
                   value={resumeText}
                   onChange={(e) => setResumeText(e.target.value)}
-                  placeholder="// Paste your CV text here. DonΓÇÖt include your photo. We donΓÇÖt care what you look like."
+                  placeholder="// Paste your CV text here. Don't include your photo. We don't care what you look like."
                   className="min-h-[180px] w-full border border-neutral-800 bg-[#050505] px-3 py-3 font-terminal text-[11px] leading-relaxed text-[#d1fae5] outline-none placeholder:text-neutral-600 focus:border-[#00ff41]"
                   spellCheck={false}
                 />
@@ -273,7 +273,7 @@ const SignalAudit: React.FC = () => {
               disabled={isRunning}
               className="mt-5 w-full border border-[#00ff41] bg-[#00ff41] px-4 py-3 font-terminal text-[11px] font-black uppercase tracking-[0.26em] text-black transition-none hover:bg-black hover:text-[#00ff41] disabled:cursor-default disabled:opacity-50"
             >
-              {isRunning ? "SCANNINGΓÇª" : "RUN DIAGNOSTIC"}
+              {isRunning ? "SCANNING..." : "RUN DIAGNOSTIC"}
             </button>
           </div>
         </div>

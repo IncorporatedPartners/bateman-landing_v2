@@ -156,13 +156,13 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 42px;
+  padding: 28px 42px;
   z-index: 900;
 }
 
 .bateman-logo {
   display: block;
-  height: 46px;
+  height: 96px;
   width: auto;
   object-fit: contain;
   image-rendering: crisp-edges;
@@ -991,7 +991,7 @@ footer {
     padding: 16px 1.5rem;
   }
   .bateman-logo {
-    height: 38px;
+    height: 64px;
   }
   .header-nav {
     gap: 1.5rem;

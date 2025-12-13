@@ -24,7 +24,7 @@ const ProtocolSection: React.FC = () => {
     <section id="protocol" className="border-b border-black bg-black">
       {/* Header */}
       <div className="border-b border-black bg-[#fdfbf7] px-4 py-10 md:px-8 md:py-14">
-        <h2 className="text-center font-display text-2xl uppercase tracking-[0.16em] md:text-3xl">
+        <h2 className="text-center font-display text-3xl uppercase tracking-[0.16em] md:text-4xl">
           The Protocol
         </h2>
       </div>
@@ -41,10 +41,10 @@ const ProtocolSection: React.FC = () => {
                 : "border-b md:border-b-0"
             ].join(" ")}
           >
-            <h3 className="mb-3 font-display text-lg uppercase tracking-[0.16em]">
+            <h3 className="mb-3 font-display text-xl uppercase tracking-[0.16em]">
               {col.title}
             </h3>
-            <p className="text-[15px] leading-relaxed text-neutral-900">
+            <p className="text-[15px] md:text-[16px] leading-[1.75] text-neutral-900">
               {col.body}
             </p>
           </div>

@@ -14,12 +14,12 @@ const items: Item[] = [
     a: (
       <>
         Because ChatGPT writes like a desperate intern. It uses words like
-        ΓÇ£tapestry,ΓÇ¥ ΓÇ£passionate,ΓÇ¥ and ΓÇ£collaborative.ΓÇ¥ It signals to recruiters
+        “tapestry,” “passionate,” and “collaborative.” It signals to recruiters
         that you are average.
         <br />
         <br />
-        Bateman is fine-tuned on Tier-1 Deal Memos and Buy-Side Analyst
-        Reports. We donΓÇÖt give you ΓÇ£better words.ΓÇ¥ We give you Signal.
+        Bateman is fine-tuned on Tier-1 Deal Memos and Buy-Side Analyst Reports.
+        We don’t give you “better words.” We give you Signal.
       </>
     )
   },
@@ -42,7 +42,7 @@ const items: Item[] = [
     a: (
       <>
         The market is harsher. We just said the quiet part out loud. If you
-        canΓÇÖt handle a digital critique of your formatting, you certainly canΓÇÖt
+        can’t handle a digital critique of your formatting, you certainly can’t
         handle the Investment Committee at Blackstone.
       </>
     )
@@ -55,9 +55,8 @@ const items: Item[] = [
         No.
         <br />
         <br />
-        Retail bots run on servers that hammer LinkedIn. Bateman runs
-        client-side, using human-signature keystrokes and respecting rate
-        limits.
+        Retail bots run on servers that hammer LinkedIn. Bateman runs client-side,
+        using human-signature keystrokes and respecting rate limits.
       </>
     )
   },
@@ -67,8 +66,8 @@ const items: Item[] = [
     a: (
       <>
         We ignore Easy Apply. Our Intelligence Feed scrapes the direct career
-        portals of the elite quad: high finance, big tech, and strategy
-        consulting ΓÇö before the roles hit public boards.
+        portals of the elite quad: high finance, big tech, and strategy consulting
+        — before the roles hit public boards.
       </>
     )
   },
@@ -77,10 +76,10 @@ const items: Item[] = [
     q: '"Does it write cover letters?"',
     a: (
       <>
-        Yes, but not the kind youΓÇÖre used to.
+        Yes, but not the kind you’re used to.
         <br />
         <br />
-        We donΓÇÖt write ΓÇ£Dear Hiring Manager, I love your company.ΓÇ¥ We write
+        We don’t write “Dear Hiring Manager, I love your company.” We write
         internal-memo-style letters that get read.
       </>
     )
@@ -122,19 +121,10 @@ const Faq: React.FC = () => {
     FINANCE: items.filter((i) => i.category === "FINANCE")
   };
 
-  // Protocol typography: mono, small, uppercase, tight institutional tracking
-  const protocolHeadingClass =
-    "font-terminal text-[10px] uppercase tracking-[0.18em] text-neutral-900";
-  const protocolQuestionClass =
-    "font-terminal text-[10px] uppercase tracking-[0.18em] leading-snug text-neutral-900";
-
-  const renderGroup = (
-    title: string,
-    categoryKey: keyof typeof grouped
-  ): React.ReactNode => (
-    <>
-      <div className="mt-12 mb-4 border-b border-black pb-2">
-        <div className={protocolHeadingClass}>{title}</div>
+  const renderGroup = (title: string, categoryKey: keyof typeof grouped) => (
+    <div className="mt-12">
+      <div className="mb-4 border-b border-black pb-2 font-terminal text-[11px] uppercase tracking-[0.26em] text-neutral-700">
+        {title}
       </div>
 
       {grouped[categoryKey].map((item) => {
@@ -144,30 +134,29 @@ const Faq: React.FC = () => {
         const active = openIndex === absIndex;
 
         return (
-          <div
-            key={item.q}
-            className="border-b border-neutral-200 last:border-black"
-          >
+          <div key={item.q} className="border-b border-neutral-200 last:border-black">
             <button
               type="button"
               onClick={() => setOpenIndex(active ? null : absIndex)}
-              className="flex w-full items-center justify-between py-4 text-left"
+              className="flex w-full items-center justify-between py-5 text-left"
             >
-              <span className={`pr-6 ${protocolQuestionClass}`}>{item.q}</span>
-              <span className="font-terminal text-[14px] text-neutral-900">
-                {active ? "ΓÇô" : "+"}
+              <span className="pr-6 font-display text-lg uppercase tracking-[0.12em] leading-snug text-neutral-900 md:text-xl">
+                {item.q}
+              </span>
+              <span className="font-terminal text-[14px] uppercase tracking-[0.16em] text-neutral-900">
+                {active ? "−" : "+"}
               </span>
             </button>
 
             {active && (
-              <div className="pb-5 text-[15px] leading-relaxed text-neutral-800">
+              <div className="pb-6 text-[15px] leading-[1.75] text-neutral-800 md:text-[16px]">
                 {item.a}
               </div>
             )}
           </div>
         );
       })}
-    </>
+    </div>
   );
 
   return (
@@ -177,17 +166,17 @@ const Faq: React.FC = () => {
     >
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 text-center">
-          <h2 className="font-display text-2xl uppercase tracking-[0.16em] md:text-3xl">
+          <h2 className="font-display text-3xl uppercase tracking-[0.16em] md:text-4xl">
             Frequently Asked Questions
           </h2>
-          <div className="mt-3 font-terminal text-[11px] italic tracking-[0.2em] text-neutral-600">
-            (Or: ΓÇ£Questions You Are Afraid To AskΓÇ¥)
+          <div className="mt-3 font-terminal text-[12px] italic tracking-[0.22em] text-neutral-600">
+            (Or: “Questions You Are Afraid To Ask”)
           </div>
         </div>
 
-        {renderGroup("The Philosophy", "PHILOSOPHY")}
-        {renderGroup("The Mechanics", "MECHANICS")}
-        {renderGroup("The Finance", "FINANCE")}
+        {renderGroup("THE PHILOSOPHY", "PHILOSOPHY")}
+        {renderGroup("THE MECHANICS", "MECHANICS")}
+        {renderGroup("THE FINANCE", "FINANCE")}
       </div>
     </section>
   );

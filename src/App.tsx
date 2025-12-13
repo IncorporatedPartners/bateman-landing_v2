@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import HeaderBar from "./components/HeaderBar";
 import Explanation from "./components/Explanation";
 import ProtocolSection from "./components/ProtocolSection";
 import SignalAudit from "./components/SignalAudit";
@@ -18,6 +17,9 @@ const App: React.FC = () => {
 
     const root = rootRef.current;
     if (!root) return;
+
+    // Track custom teardown callbacks that GSAP won't handle for us.
+    const cleanups: Array<() => void> = [];
 
     // Everything inside this context is scoped to rootRef.
     const ctx = gsap.context(() => {
@@ -262,21 +264,21 @@ const App: React.FC = () => {
           window.cancelAnimationFrame(raf);
           window.removeEventListener("resize", resize);
         };
-
-        // Attach cleanup to ctx revert lifecycle
-        // (gsap.context().revert() will run; we still do explicit cleanup)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (ctx as any).add?.(cleanup);
+        cleanups.push(cleanup);
       }
     }, root);
 
     return () => {
+      cleanups.forEach((fn) => fn());
       ctx.revert();
     };
   }, []);
 
   return (
-    <div ref={rootRef}>
+    <div
+      ref={rootRef}
+      className="text-[18px] leading-[1.65] text-neutral-900"
+    >
       <div className="noise-overlay" />
 
       {/* Ticker (unchanged) */}
@@ -315,8 +317,24 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Header now comes from component (logo change will now show) */}
-      <HeaderBar />
+      {/* Header */}
+      <header className="site-header">
+        <div className="header-left">
+          <img src="/bateman_logo.png" alt="Bateman" className="bateman-logo" />
+        </div>
+
+        <nav className="header-nav">
+          <a href="#protocol" className="nav-link">
+            PROTOCOL
+          </a>
+          <a href="#faq" className="nav-link">
+            FAQ
+          </a>
+          <a href="#acquire" className="nav-link">
+            ACQUIRE
+          </a>
+        </nav>
+      </header>
 
       {/* HERO (kept inline to avoid redesign) */}
       <section className="hero" id="acquire">
