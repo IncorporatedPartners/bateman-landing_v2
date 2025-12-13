@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nLock typography system + Bateman polish\n\n- Establish global design token system (layout, type, spacing)\n- Increase body text sizes to institutional grade (18px)\n- Reduce header/logo to compact proportions\n- Rebuild FAQ with Protocol-level authority + updated copy\n- Normalize What Bateman Does and Protocol typography\n- Update waitlist copy to Bateman tone + add queue confirmation\n- Add hand-drawn red strikethrough on \"GODDAMN\" in footer\n- Unify all section spacing and responsive behavior\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

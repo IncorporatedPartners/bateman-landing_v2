@@ -21,34 +21,20 @@ const cols = [
 
 const ProtocolSection: React.FC = () => {
   return (
-    <section id="protocol" className="border-b border-black bg-black">
-      {/* Header */}
-      <div className="border-b border-black bg-[#fdfbf7] px-4 py-10 md:px-8 md:py-14">
-        <h2 className="text-center font-display text-3xl uppercase tracking-[0.16em] md:text-4xl">
-          The Protocol
-        </h2>
+    <section id="protocol" className="protocol-section">
+      <div className="protocol-header-container">
+        <h2 className="protocol-main-title">The Protocol</h2>
       </div>
 
-      {/* Columns */}
-      <div className="mx-auto grid max-w-6xl border-x border-black md:grid-cols-3">
-        {cols.map((col, i) => (
-          <div
-            key={col.title}
-            className={[
-              "protocol-card bg-[#fdfbf7] px-6 py-10 md:px-8 md:py-12",
-              i !== cols.length - 1
-                ? "border-b border-black/20 md:border-b-0 md:border-r"
-                : "border-b md:border-b-0"
-            ].join(" ")}
-          >
-            <h3 className="mb-3 font-display text-xl uppercase tracking-[0.16em]">
-              {col.title}
-            </h3>
-            <p className="text-[15px] md:text-[16px] leading-[1.75] text-neutral-900">
-              {col.body}
-            </p>
-          </div>
-        ))}
+      <div className="protocol-grid-container">
+        <div className="protocol-grid">
+          {cols.map((col, i) => (
+            <div key={col.title} className="protocol-card">
+              <h3 className="protocol-card-title">{col.title}</h3>
+              <p className="protocol-card-body">{col.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

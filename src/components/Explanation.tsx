@@ -24,30 +24,21 @@ const steps = [
 
 const Explanation: React.FC = () => {
   return (
-    <section className="border-b border-black bg-[#fdfbf7] px-6 py-16 md:px-8 md:py-20">
-      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[260px_minmax(0,1fr)]">
-        <h2 className="font-display text-3xl uppercase tracking-[0.12em] leading-snug md:text-4xl">
+    <section className="explanation-section">
+      <div className="explanation-container">
+        <h2 className="explanation-title">
           What Bateman
           <br />
           actually does
         </h2>
 
-        <div className="flex flex-col gap-8">
+        <div className="explanation-steps">
           {steps.map((step) => (
-            <div
-              key={step.num}
-              className="step grid grid-cols-[32px_minmax(0,1fr)] gap-4"
-            >
-              <div className="border-t border-black pt-2 font-terminal text-[12px] uppercase tracking-[0.22em]">
-                {step.num}
-              </div>
-              <div>
-                <h3 className="mb-2 font-display text-2xl leading-snug">
-                  {step.title}
-                </h3>
-                <p className="text-[16px] leading-relaxed text-neutral-900">
-                  {step.body}
-                </p>
+            <div key={step.num} className="step">
+              <div className="step-num">{step.num}</div>
+              <div className="step-content">
+                <h3 className="step-title">{step.title}</h3>
+                <p className="step-body">{step.body}</p>
               </div>
             </div>
           ))}

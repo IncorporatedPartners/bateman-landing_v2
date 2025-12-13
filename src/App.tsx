@@ -279,6 +279,14 @@ const App: React.FC = () => {
       ref={rootRef}
       className="text-[19px] leading-[1.7] text-neutral-900"
     >
+      <svg width="0" height="0" style={{ position: "absolute" }}>
+        <defs>
+          <filter id="scratchy">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
       <div className="noise-overlay" />
 
       {/* Ticker (unchanged) */}
@@ -320,7 +328,7 @@ const App: React.FC = () => {
       {/* Header */}
       <header className="site-header">
         <div className="header-left">
-          <img src="/bateman_logo.png" alt="Bateman" className="bateman-logo" />
+          <img src="/bateman-logo.png" alt="Bateman" className="bateman-logo" />
         </div>
 
         <nav className="header-nav">
@@ -365,9 +373,39 @@ const App: React.FC = () => {
                 id="waitlist-form"
                 action="https://formspree.io/f/xeobvwev"
                 method="POST"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const form = e.currentTarget;
+                  const statusEl = document.getElementById("waitlist-status");
+                  const emailInput = form.querySelector<HTMLInputElement>("#waitlist-email");
+
+                  if (!emailInput || !statusEl) return;
+
+                  const queueNum = Math.floor(Math.random() * 900) + 5400;
+
+                  fetch(form.action, {
+                    method: "POST",
+                    body: new FormData(form),
+                    headers: { Accept: "application/json" }
+                  })
+                    .then((res) => {
+                      if (res.ok) {
+                        statusEl.textContent = `CONFIRMED. YOU ARE #${queueNum} IN THE QUEUE. WE'LL CONTACT YOU WHEN IT'S TIME TO WORK.`;
+                        statusEl.className = "waitlist-status mono success";
+                        emailInput.value = "";
+                      } else {
+                        statusEl.textContent = "SUBMISSION FAILED. TRY AGAIN OR YOU'RE NOT SERIOUS.";
+                        statusEl.className = "waitlist-status mono error";
+                      }
+                    })
+                    .catch(() => {
+                      statusEl.textContent = "NETWORK ERROR. CHECK YOUR CONNECTION.";
+                      statusEl.className = "waitlist-status mono error";
+                    });
+                }}
               >
                 <label htmlFor="waitlist-email" className="waitlist-label mono">
-                  Drop your best email. We&apos;ll invite you when Bateman is live.
+                  ENTER YOUR EMAIL. NO SPAM. NO BULLSHIT. JUST ACCESS.
                 </label>
                 <div className="waitlist-row">
                   <input

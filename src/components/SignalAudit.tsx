@@ -182,7 +182,7 @@ const SignalAudit: React.FC = () => {
       className="border-b border-black bg-[#fdfbf7] px-4 py-14 md:px-8 md:py-16"
     >
       <div className="mx-auto max-w-4xl">
-        <div className="mb-8 text-center font-display text-sm uppercase tracking-[0.26em]">
+        <div className="mb-8 text-center font-display text-lg uppercase tracking-[0.26em] md:text-xl">
           The Signal Audit
         </div>
 
