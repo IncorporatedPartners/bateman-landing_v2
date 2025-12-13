@@ -5,18 +5,18 @@ const steps = [
   {
     num: "01",
     title: "Uncovers high-value roles before they’re visible to the public.",
-    body: "We don’t scrape job boards. We hit the source — directly — hours before LinkedIn even wakes up.",
+    body: "We don’t scrape job boards. We hit the source — directly — hours before LinkedIn even wakes up."
   },
   {
     num: "02",
     title: "Rebuilds your résumé into a hostile instrument.",
-    body: "We delete the emotional clutter and replace it with quantifiable dominance: deal sizes, velocity, impact, results. The language of people who make decisions.",
+    body: "We delete the emotional clutter and replace it with quantifiable dominance: deal sizes, velocity, impact, results. The language of people who make decisions."
   },
   {
     num: "03",
     title: "Executes your application client-side with human keystrokes.",
-    body: "No servers. No spam. Just silent, flawless precision — indistinguishable from a very competent human operating at inhuman speed.",
-  },
+    body: "No servers. No spam. Just silent, flawless precision — indistinguishable from a very competent human operating at inhuman speed."
+  }
 ];
 
 const Explanation: React.FC = () => {
@@ -33,7 +33,7 @@ const Explanation: React.FC = () => {
           {steps.map((step) => (
             <div
               key={step.num}
-              className="grid grid-cols-[32px_minmax(0,1fr)] gap-4"
+              className="step grid grid-cols-[32px_minmax(0,1fr)] gap-4"
             >
               <div className="border-t border-black pt-2 font-terminal text-[11px] uppercase tracking-[0.22em]">
                 {step.num}

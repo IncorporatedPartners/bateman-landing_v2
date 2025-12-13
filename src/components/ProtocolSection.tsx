@@ -5,18 +5,18 @@ const cols = [
   {
     title: "The Intelligence Feed",
     body:
-      "We ignore the scraps on job boards. We monitor the direct career portals of elite institutions and detect openings the moment they appear. This is Time Arbitrage — and you have it.",
+      "We ignore the scraps on job boards. We monitor the direct career portals of elite institutions and detect openings the moment they appear. This is Time Arbitrage — and you have it."
   },
   {
     title: "The Signal Layer",
     body:
-      "We recalibrate your résumé using metrics that matter. No adjectives. No begging. Just quantifiable results written in a tone that forces a VP to look twice at 2:00 AM.",
+      "We recalibrate your résumé using metrics that matter. No adjectives. No begging. Just quantifiable results written in a tone that forces a VP to look twice at 2:00 AM."
   },
   {
     title: "The Hybrid Engine",
     body:
-      "Client-side execution. Human keystrokes. Bot-level discipline. Your application slips through ATS filters like a tailored suit through a revolving door.",
-  },
+      "Client-side execution. Human keystrokes. Bot-level discipline. Your application slips through ATS filters like a tailored suit through a revolving door."
+  }
 ];
 
 const ProtocolSection: React.FC = () => {
@@ -34,11 +34,12 @@ const ProtocolSection: React.FC = () => {
         {cols.map((col, i) => (
           <div
             key={col.title}
-            className={`protocol-card bg-[#fdfbf7] px-6 py-10 md:px-8 md:py-12 ${
+            className={[
+              "protocol-card bg-[#fdfbf7] px-6 py-10 md:px-8 md:py-12",
               i !== cols.length - 1
                 ? "border-b border-black/20 md:border-b-0 md:border-r"
                 : "border-b md:border-b-0"
-            }`}
+            ].join(" ")}
           >
             <h3 className="mb-3 font-display text-lg uppercase tracking-[0.16em]">
               {col.title}
